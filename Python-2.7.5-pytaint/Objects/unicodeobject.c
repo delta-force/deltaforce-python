@@ -8295,7 +8295,7 @@ unicode_listmerits(PyUnicodeObject *v)
         Py_RETURN_NONE;
     }
 
-    return PySet_New((PyObject*)PyUnicode_GET_MERITS(v));
+    return PySet_New((PyObject*)PyUnicode_GET_MERITS_LIST(v));
 }
 
 PyDoc_STRVAR(listmerits__doc__,

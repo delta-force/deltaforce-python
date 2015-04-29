@@ -189,7 +189,7 @@ class MeritsTest(AbstractTaintTest):
         u = 'uuuuu'
 
         self.assertMerits(u + s, None)
-
+        
         self.assertMerits(u + t_full, [MeritFull])
         self.assertMerits(u + s_full, [MeritFull])
         self.assertMerits(u + t_all, [MeritFull])

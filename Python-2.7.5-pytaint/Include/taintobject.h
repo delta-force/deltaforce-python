@@ -6,6 +6,15 @@ extern "C" {
 
 typedef struct { PyObject_VAR_HEAD } PyTaintObject;
 
+/*  Fetch the merits as a list. */
+
+PyAPI_FUNC(PyObject*) PyTaint_GetMeritsList(PyTaintObject *taint);
+
+/* Fetch  the sources of a string as a list */
+
+PyAPI_FUNC(PyObject*) PyTaint_GetSourcesList(PyTaintObject *taint);
+
+
 /*  Create an object representing taint with no merits (ie. empty tuple).
     Returns NULL on failure.
 */

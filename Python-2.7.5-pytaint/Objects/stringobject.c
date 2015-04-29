@@ -1758,8 +1758,7 @@ string_listmerits(PyStringObject *self)
     if (self->ob_merits == NULL) {
         Py_RETURN_NONE;
     }
-
-    return PySet_New((PyObject*)PyString_GET_MERITS(self));
+    return PySet_New(PyString_GET_MERITS_LIST(self));
 }
 
 PyDoc_STRVAR(propagate__doc__,

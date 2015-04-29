@@ -122,6 +122,8 @@ do { \
 #define PyString_AS_STRING(op) (((PyStringObject *)(op))->ob_sval)
 #define PyString_GET_SIZE(op)  Py_SIZE(op)
 #define PyString_GET_MERITS(op) (((PyStringObject *)(op))->ob_merits)
+#define PyString_GET_MERITS_LIST(op) PyTaint_GetMeritsList((PyTaintObject *)(((PyStringObject *)(op))->ob_merits))
+
 #define PyString_ASSIGN_MERITS(x, t) \
 do {\
   (((PyStringObject*)x)->ob_merits = t);\

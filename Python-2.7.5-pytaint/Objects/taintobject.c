@@ -4,6 +4,23 @@
 #include <ctype.h>
 #include <stddef.h>
 
+PyObject*
+PyTaint_GetMeritsList(PyTaintObject *taint) {
+    if (taint == NULL) {
+        return NULL;
+    }
+
+    return PyDict_GetItemString((PyObject*)taint, "merits");
+}
+
+PyObject*
+PyTaint_GetSourcesList(PyTaintObject *taint) {
+    if (taint == NULL) {
+        return NULL;
+    }
+    return PyDict_GetItemString((PyObject*)taint, "sources");
+}
+
 PyTaintObject *
 PyTaint_EmptyMerits()
 {
@@ -289,7 +306,7 @@ PyTaint_PropagationResult(PyTaintObject **target,
     // Both tainted - intersect two merits list
     if (!PyTaint_IS_CLEAN(ta) && !PyTaint_IS_CLEAN(tb)) {
         a = PyDict_GetItemString((PyObject*)ta, "merits");
-        b = PyDict_GetItemString((PyObject*)ta, "merits");
+        b = PyDict_GetItemString((PyObject*)tb, "merits");
         
         n = PyTuple_GET_SIZE(a) > PyTuple_GET_SIZE(b) ?
               PyTuple_GET_SIZE(a) : PyTuple_GET_SIZE(b);

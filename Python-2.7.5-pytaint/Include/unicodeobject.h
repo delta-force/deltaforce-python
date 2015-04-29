@@ -451,6 +451,7 @@ PyAPI_DATA(PyTypeObject) PyUnicode_Type;
     ((const char *)((PyUnicodeObject *)(op))->str)
 #define PyUnicode_GET_MERITS(op) \
     (((PyUnicodeObject *)(op))->merits)
+#define PyUnicode_GET_MERITS_LIST(op) PyTaint_GetMeritsList((PyTaintObject *)(((PyUnicodeObject *)(op))->merits))
 
 #define PyUnicode_IS_SHARED(op) \
     (((PyUnicodeObject*)op) == unicode_empty || \
