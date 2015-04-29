@@ -128,6 +128,12 @@ do {\
   Py_XINCREF(t);\
 } while(0);\
 
+#define PyString_ASSIGN_SOURCE(x, s) \
+do {\
+  (((PyStringObject*)x)->ob_source = s);\
+  Py_XINCREF(s);\
+} while(0);\
+
 /* _PyString_Join(sep, x) is like sep.join(x).  sep must be PyStringObject*,
    x must be an iterable object. */
 PyAPI_FUNC(PyObject *) _PyString_Join(PyObject *sep, PyObject *x);

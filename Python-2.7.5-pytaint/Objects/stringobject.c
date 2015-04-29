@@ -1694,6 +1694,18 @@ string_taint(PyStringObject *self)
                                                 taint);
 }
 
+PyDoc_STRVAR(taint_src__doc__,
+"S.taint(src) -> str\n\
+\n\
+Return a tainted copy of S without any merits and a given source.");
+
+static PyObject *
+string_taint_src(PyStringObject *self, PyObject *src)
+{
+    PyObject *ps = string_taint(self);
+    return ps;
+}
+
 PyDoc_STRVAR(cleanfor__doc__,
 "S._cleanfor(M) -> string\n\
 \n\
@@ -4261,6 +4273,7 @@ string_methods[] = {
     {"zfill", (PyCFunction)string_zfill, METH_VARARGS, zfill__doc__},
     {"format", (PyCFunction) do_string_format, METH_VARARGS | METH_KEYWORDS, format__doc__},
     {"taint", (PyCFunction)string_taint, METH_NOARGS, taint__doc__},
+    {"taint_src", (PyCFunction)string_taint_src, METH_VARARGS, taint_src__doc__},
     {"isclean", (PyCFunction)string_isclean, METH_VARARGS, isclean__doc__},
     {"istainted", (PyCFunction)string_istainted, METH_NOARGS, istainted__doc__},
     {"_cleanfor", (PyCFunction)string_cleanfor, METH_O, cleanfor__doc__},
