@@ -4,7 +4,7 @@ Delta Force Python
 The only Python interpreter officially endorsed by Walker, Texas
 Ranger
 
-`
+<pre>
 ''',',''''''','',,,;;:::::cclccllllllclllllllcccclc::::;;;;;;;;:;,,;,;;:;;;;;;
 '''',''''',;,;;;;::::cccloloollloooooddddooollcollccccc:::::::::::::;,;;;;;;,,
 ',','''',,,,;;::cccccclloooooc:,''''',;:;:cloxkxollllllllllccc::::::.',';;;,,,
@@ -44,7 +44,7 @@ KXX0o,      ...... .... .'.'':.;;c;:clllllcc::c;.,c,.,'..'lkKKd,:0NXXKOc.,,'.'
   .  ...   .. . ........ lol;c,,:clc:,:::cc:;,.,clkKOlooc. .,c:xOOOc';ll:,. ..
 ......... ... ...........c:oo:,,ololcl;,;:;;,.;ok00NOldoc..'c;..,:::;'..   . .
 .......  .............. 'l:,:col;olcddlc,,,'.,dk0KO0oclcc'  ,ol'..,,;:,.'.....
-`
+</pre>
 
 This is a fork of the pytaint project to support Team Delta Force's
 self defending Django application. The main difference between it
