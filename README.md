@@ -1,5 +1,83 @@
-pytaint
-=======
+Delta Force Python
+=============
+
+The only Python interpreter officially endorsed by Walker, Texas
+Ranger
+
+
+''',',''''''','',,,;;:::::cclccllllllclllllllcccclc::::;;;;;;;;:;,,;,;;:;;;;;;
+'''',''''',;,;;;;::::cccloloollloooooddddooollcollccccc:::::::::::::;,;;;;;;,,
+',','''',,,,;;::cccccclloooooc:,''''',;:;:cloxkxollllllllllccc::::::.',';;;,,,
+,,''''',,;;::ccclllloooooc,..      .. .....';ckkkloololloollllcc::::,,;,;;;,,,
+''''''',;::cccclooodddo,....      ...........,lx0xloooolloolllccccc:;;,,,,;;;,
+'.''',,;:clclllodxxxxo..      .  .............,:o0dloooolooolllccc::;;;;,,,;;;
+'',,;;;:cllooooodxkxxc    .. .................',:lOdoooooooooolllcc::::;:;;;;;
+,;;;:::cclloddxxxkkxk.      ....................';lkdoooooooolllllcccc::cc:::;
+;:;:cccllloodxxxkkkkx            ................':dkoloollllllllllolllllc::::
+;;:cccllloodxxxxxxxkl    .      ..... ...........';cox:cclclllllooooooollccccc
+;:cccllolodxxxxxkkkO,            ...   ...........';lxl:ccclcllooddddddoollccc
+;;:clloodddxkkkkkkk0.                         .....,:oo;:clcloddxdodddxxddooll
+::clloddxxxkkkOOkkOO                   ... .....';clodx;cloddl:,,;coodl;cxxdoo
+::loodxxOxdolc:::cc:                       ..':ccloodxkkxdo:';clcc:;''cddxxxdo
+:cooxxl;'.............   .. .....   ...,coxkkkkOOOkOOOOOOOkoll;'.,:okkkkkxkOkd
+clol'................          ......'',,,,,,'''.'......   ..;cdkO000000OOOOOk
+cl'. ..  .. . .....         ..............''''',,,'.''',.;ldxkkO0KKK0KKKK0OOOO
+l,..... ..           ..    .....''''...'',,,;:c:;..',,;c:dxkOO0KKKKKXKKKK0000O
+lc......... ..      .....  .''',:;:;::clccc::ccc:cclolcoldkkO0KKKKXKXKKKKKKKK0
+odo,.  ..... .     ....''...',,;;:cclloddodllcloolodddodoxkO0KXXXKKXXXXKKKK0KK
+odxxxl,.......  .   ','',...';,;:clllodddool::cldooooookokOKKXXXXXNXXXXXXXXXXK
+oddxkkOOko:'..... .  ':;;:...;;;:cccllooodl:cclook:loodOdO0KKXXNNNXXXXNNNXXXKK
+odxkkkkOOO00000Okxc   .,cc'..,;;;::ccllooolc::cccl::ooxOx0KKXNNNNNNNNXNNNXXXK0
+dkOOOOOOOOOOOO00KXK:    .,,.'',;;,;::cloll::;,',,,;:ldXOk0XXXXNNWNNNNNNNNXNXXK
+kO0K000K0K000000KKKKo.  .''...',,;;;::;,,,,',,.;;;::OONxOKXXXNNWWWWWNWWNNNNNXX
+O0KKKKKKKKKKKKKKKKKKOkl:.',....',,,;:,',,,,,,,;:lodcc0OxOKXXNWWWWWWWWWWWWWNNXN
+OO00KXXXKKKKKKKKKKKKK00k';::,...'.,'''':lclllllodkkck0dxO0KNNNWWWWWWWNNWWWNXXX
+0KKKKXXXXXXXXXXXXXXXX0',.;::cc,.''''..'',,;,,,';::oKKooxO0KXNNWWWWWWNNWWNNNXXX
+000KKXXXNXXXXXXNNXNWk  c,;:ccloc,.'...,''';c::lloOXWdkodk0KXNWWWWWWWWWWNNNXKKK
+00KXXXXXXXXXXXXXXNWo   co,,:cloool;''.....,;:;:cclO::xKxxO0XXNNNNWWWWNNNXXXXKK
+0KXXXXXXXKXXXXXN0o...  cld:,,;clodocc:c;,...',,;,..,cd0koldkKNNWWMWWWNNNXXXXKK
+KXKXXXXXXXXXXW0'  ...  'llddc,';cooolcccodl::o,''.,;cok.c,,'.',:coxOXWWWNNXXKX
+KXKKKKXNNNKxc........   ':coxo;;,:llollclllcc:;;,.:clol;,ldkxc::colc;,coONWNXX
+KXXXNNXkc..  ........   ..',;',o:;;cllllllc:cc::,.ccl:, 'cO0OolldKKKkl;,,';dKW
+KXX0o,      ...... .... .'.'':.;;c;:clllllcc::c;.,c,.,'..'lkKKd,:0NXXKOc.,,'.'
+0l.     .. ............. o:,;;,.col;;cccclcc::;.':c:llo:l'.,kO0x;d0xkKKkc. ...
+  .  ...   .. . ........ lol;c,,:clc:,:::cc:;,.,clkKOlooc. .,c:xOOOc';ll:,. ..
+......... ... ...........c:oo:,,ololcl;,;:;;,.;ok00NOldoc..'c;..,:::;'..   . .
+.......  .............. 'l:,:col;olcddlc,,,'.,dk0KO0oclcc'  ,ol'..,,;:,.'.....
+
+This is a fork of the pytaint project to support Team Delta Force's
+self defending Django application. The main difference between it
+and the original pytaint code is that it supports propogating the
+origins of a tainted string throughout an application. This origin
+is not as robust as providing which line of code a tainted string
+was generated from, but it allows developers to taint input and
+provide ids for each tainted string.
+
+For example, the data given in an HTTP request can often be described
+as a set of key value pairs. In our system the values are tainted
+and the source of each taint is that value's key in the HTTP request.
+As tainted values go through the application to sinks, the developer
+can check the source of a tainted value at any time.
+
+The simplest example of this would be a SQL query. In pytaint,
+tainted values can never remove their taint, but they can gain
+Merits, which allow them to be clean for certain sinks. Suppose I
+receive a request, and I use some of the values in the request to
+build an SQL query. I can clean parameters before they are included
+in the query, and thus give merits to tainted values. Whenever you
+combine two tainted values, the merits of the result will be the
+intersection of the arguments' merits. Therefore, if I use an
+unmerrited string to build a SQL query, the query becomes tainted
+and loses all merit. Once it reaches a sink (the execute function),
+the tainting system will throw an exception. From this exception,
+we could extract the origin of the tainted data used in the string,
+which could be used for debugging or for building filters. We
+intended to do the latter for our project.
+
+
+Original README
+=============
+
 The goal of pytaint project is to provide a taint tracking mechanism for Python
 by modifying the CPython interpreter and adding a module with convenience
 functions. Taint tracking is a feature which allows to monitor the flow of

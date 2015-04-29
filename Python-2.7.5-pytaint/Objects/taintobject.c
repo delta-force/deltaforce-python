@@ -80,6 +80,13 @@ _PyTaint_AddMerit(PyTaintObject *taint, PyObject *merit)
 }
 
 int
+PyTaint_AddSource(PyTaintObject *taint, PyObject *src) {
+    PyObject *sources = PyDict_GetItemString(taint, "sources");
+    
+    return PySet_Add(sources, src);
+}
+
+int
 _PyTaint_TaintStringListItems(PyObject *target, PyTaintObject *source) {
     if (PyTaint_IS_CLEAN(source))
         return 1;

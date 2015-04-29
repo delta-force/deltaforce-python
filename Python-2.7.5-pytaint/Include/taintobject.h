@@ -28,6 +28,10 @@ PyAPI_FUNC(PyTaintObject*) PyTaint_EmptyMerits();
 PyAPI_FUNC(PyTaintObject*) _PyTaint_AddMerit(PyTaintObject *taint,
                                              PyObject *new_merit);
 
+/* Add a Source to a Taint */
+PyAPI_FUNC(int) PyTaint_AddSource(PyTaintObject *taint,
+                                             PyObject *new_source);
+                                             
 /* Extract taint from taintable object - ie. string or unicode. Since it should
    be only used internally, Py_FatalError is raised when an invalid object is
    passed. Returns borrowed reference.

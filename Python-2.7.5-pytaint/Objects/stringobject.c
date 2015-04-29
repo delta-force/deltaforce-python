@@ -1703,7 +1703,27 @@ static PyObject *
 string_taint_src(PyStringObject *self, PyObject *src)
 {
     PyObject *ps = string_taint(self);
+    
+    PyTaint_AddSource(PyString_GET_MERITS(ps), src);
+    
     return ps;
+}
+
+PyDoc_STRVAR(sources__doc__,
+"S.sources() -> set(str)\n\
+\n\
+Return a list of sources that identify where this tainted string originated. "
+"If the string is not tainted, return an empty list.");
+
+static PyObject *
+string_sources(PyStringObject *self)
+{
+    PyTaintObject *t = self->ob_merits;
+    if(t == NULL) {
+        return PySet_New(NULL);
+    }
+    
+    return PyTaint_GetSourcesList(self->ob_merits);
 }
 
 PyDoc_STRVAR(cleanfor__doc__,
@@ -4273,6 +4293,7 @@ string_methods[] = {
     {"format", (PyCFunction) do_string_format, METH_VARARGS | METH_KEYWORDS, format__doc__},
     {"taint", (PyCFunction)string_taint, METH_NOARGS, taint__doc__},
     {"taint_src", (PyCFunction)string_taint_src, METH_VARARGS, taint_src__doc__},
+    {"sources", (PyCFunction)string_sources, METH_NOARGS, sources__doc__},
     {"isclean", (PyCFunction)string_isclean, METH_VARARGS, isclean__doc__},
     {"istainted", (PyCFunction)string_istainted, METH_NOARGS, istainted__doc__},
     {"_cleanfor", (PyCFunction)string_cleanfor, METH_O, cleanfor__doc__},
