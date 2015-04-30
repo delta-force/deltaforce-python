@@ -8203,6 +8203,21 @@ PyDoc_STRVAR(taint__doc__,
 Return a tainted copy of S without any merits.");
 
 static PyObject *
+unicode_taint_src(PyUnicodeObject *v, PyObject *src)
+{
+    PyObject *ps = unicode_taint(v);
+    
+    PyTaint_AddSource(PyString_GET_MERITS(ps), src);
+    
+    return ps;
+}
+
+PyDoc_STRVAR(taint_src__doc__,
+             "S.taint_src(source) -> unicode\n\
+\n\
+Return a tainted copy of S without any merits and with origin source.");
+
+static PyObject *
 unicode_istainted(PyUnicodeObject *v)
 {
     long taint_val = (long)(PyUnicode_CHECK_TAINTED(v));
@@ -8343,6 +8358,7 @@ static PyMethodDef unicode_methods[] = {
     {"decode", (PyCFunction) unicode_decode, METH_VARARGS | METH_KEYWORDS, decode__doc__},
 /*  {"maketrans", (PyCFunction) unicode_maketrans, METH_VARARGS, maketrans__doc__}, */
     {"taint", (PyCFunction)unicode_taint, METH_NOARGS, taint__doc__},
+    {"taint_src", (PyCFunction)unicode_taint_src, METH_VARARGS, taint_src__doc__},
     {"isclean", (PyCFunction)unicode_isclean, METH_VARARGS, isclean__doc__},
     {"istainted", (PyCFunction)unicode_istainted, METH_NOARGS, istainted__doc__},
     {"_cleanfor", (PyCFunction)unicode_cleanfor, METH_O, cleanfor__doc__},
