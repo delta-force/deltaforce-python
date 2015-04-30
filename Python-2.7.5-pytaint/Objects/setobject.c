@@ -52,8 +52,9 @@ _PySet_Dummy(void)
 
 /* Reuse scheme to save calls to malloc, free, and memset */
 #ifndef PySet_MAXFREELIST
-#define PySet_MAXFREELIST 80
+#define PySet_MAXFREELIST 4096 
 #endif
+
 static PySetObject *free_list[PySet_MAXFREELIST];
 static int numfree = 0;
 

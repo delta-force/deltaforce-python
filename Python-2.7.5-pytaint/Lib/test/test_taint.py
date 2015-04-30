@@ -1028,17 +1028,19 @@ class VariadicStringOperationTest(AbstractTaintTest):
         self.assertClean('u')
 
     def test_rjust(self):
+   
         t = '   t  t t tt   tt'.taint()
         t2 = ''.taint()
         u = 'u  uu   uuu   uuuu  u'
         u2 = ''
         a = 'a  aa aa a    a'._cleanfor(MeritFull)
         b = u._cleanfor(MeritFull)._cleanfor(MeritNone)
-
+        
         x = '-'
         y = '-'.taint()
         z = '-'._cleanfor(MeritPartial)
 
+        
         self.assertTainted(t.rjust(20))
         self.assertTainted(t2.rjust(20))
         self.assertTainted(a.rjust(20))

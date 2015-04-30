@@ -10,7 +10,10 @@ PyTaint_GetMeritsList(PyTaintObject *taint) {
         return NULL;
     }
 
-    return PyDict_GetItemString((PyObject*)taint, "merits");
+    PyObject *merits = PyDict_GetItemString((PyObject*)taint, "merits");
+    Py_INCREF(merits);
+
+    return merits;
 }
 
 PyObject*
@@ -18,7 +21,10 @@ PyTaint_GetSourcesList(PyTaintObject *taint) {
     if (taint == NULL) {
         return NULL;
     }
-    return PyDict_GetItemString((PyObject*)taint, "sources");
+    
+    PyObject *sources = PyDict_GetItemString((PyObject*)taint, "sources");
+    Py_INCREF(sources);
+    return sources;
 }
 
 PyTaintObject *
@@ -30,7 +36,7 @@ PyTaint_EmptyMerits()
     
     PyObject *merits = PyTuple_New(0);
     PyObject *sources = PySet_New(NULL);
-    
+ 
     PyDict_SetItemString(taint, "merits", merits);
     PyDict_SetItemString(taint, "sources", sources);
     
@@ -81,7 +87,7 @@ _PyTaint_AddMerit(PyTaintObject *taint, PyObject *merit)
 
 int
 PyTaint_AddSource(PyTaintObject *taint, PyObject *src) {
-    PyObject *sources = PyDict_GetItemString(taint, "sources");
+    PyObject *sources = PyDict_GetItemString((PyObject*)taint, "sources");
     
     return PySet_Add(sources, src);
 }

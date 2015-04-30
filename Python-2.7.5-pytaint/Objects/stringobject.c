@@ -3771,7 +3771,6 @@ do_padding(PyStringObject *self, PyObject *args, int padtype)
         taintobj = PyString_GET_MERITS(self);
     }
 
-
     if (PyString_GET_SIZE(self) >= width && PyString_CheckExact(self)) {
         if (PyString_GET_MERITS(self) == taintobj) {
             Py_INCREF(self);
@@ -3813,7 +3812,7 @@ do_padding(PyStringObject *self, PyObject *args, int padtype)
 
   done:
     if (padding != NULL)
-        Py_XDECREF(taintobj);
+      Py_XDECREF(taintobj);
     // when padding == NULL, taintobj is borrowed from self, so no decref
     return result;
 }
