@@ -7,7 +7,7 @@
 PyObject*
 PyTaint_GetMeritsList(PyTaintObject *taint) {
     if (taint == NULL) {
-        return NULL;
+        return PyTuple_New(0);
     }
 
     PyObject *merits = PyDict_GetItemString((PyObject*)taint, "merits");
@@ -19,7 +19,7 @@ PyTaint_GetMeritsList(PyTaintObject *taint) {
 PyObject*
 PyTaint_GetSourcesList(PyTaintObject *taint) {
     if (taint == NULL) {
-        return NULL;
+        return PyTuple_New(0);
     }
     
     PyObject *sources = PyDict_GetItemString((PyObject*)taint, "sources");
@@ -35,7 +35,7 @@ PyTaint_EmptyMerits()
     PyObject *taint = PyDict_New();
     
     PyObject *merits = PyTuple_New(0);
-    PyObject *sources = PySet_New(NULL);
+    PyObject *sources = PyTuple_New(0);
  
     PyDict_SetItemString(taint, "merits", merits);
     PyDict_SetItemString(taint, "sources", sources);
@@ -76,9 +76,20 @@ _PyTaint_AddMerit(PyTaintObject *taint, PyObject *merit)
     Py_INCREF(merit);
     PyTuple_SET_ITEM(rmerit, n, merit);
     
-    /** Just copy the sources. */
-    rsource = PySet_New(ss);
+    /** Copy sources over as well. */
+    n = PyTuple_GET_SIZE(ss);
     
+    rsource = PyTuple_New(n);
+    
+    if(rsource == NULL)
+        return NULL;
+    
+    for(i = 0; i < n; i++) {
+        item = PyTuple_GET_ITEM(ms, i);
+        Py_INCREF(item);
+        PyTuple_SET_ITEM(rsource, i, item);
+    }
+ 
     PyDict_SetItemString(result, "merits", rmerit);
     PyDict_SetItemString(result, "sources", rsource);
 
@@ -89,7 +100,26 @@ int
 PyTaint_AddSource(PyTaintObject *taint, PyObject *src) {
     PyObject *sources = PyDict_GetItemString((PyObject*)taint, "sources");
     
-    return PySet_Add(sources, src);
+    int n, i;
+    PyObject *newsources, *item;
+    
+    n = PyTuple_GET_SIZE(sources);
+    newsources = PyTuple_New(n+1);
+    
+    if (newsources == NULL) {
+        return -1;
+    }
+    
+    for (i = 0; i < n; i++) {
+        item = PyTuple_GET_ITEM(sources, i);
+        Py_INCREF(item);
+        PyTuple_SET_ITEM(newsources, i, item);
+    }
+    Py_INCREF(src);
+    PyTuple_SET_ITEM(newsources, n, src);
+
+    PyDict_SetItemString((PyObject*)taint, "sources", newsources);
+    return 0;
 }
 
 int
@@ -351,15 +381,39 @@ PyTaint_PropagationResult(PyTaintObject **target,
           return -1;
         
         /** Merge the sources */
-        PyObject *merged = PyString_FromString("union");
-        
         as = PyDict_GetItemString((PyObject*)ta, "sources");
         bs = PyDict_GetItemString((PyObject*)tb, "sources");
         
-        new_src = PyObject_CallMethodObjArgs(as, merged, bs, NULL);
+        n = 0;
+        j = 0;
         
-        if(new_src == NULL)
-            goto onError;
+        n = PyTuple_GET_SIZE(as) + PyTuple_GET_SIZE(bs);
+        
+        new_src = PyTuple_New(n);
+        if (new_src == NULL)
+          return -1;
+
+        for (i = 0; i < PyTuple_GET_SIZE(as); i++) {
+            m = PyTuple_GET_ITEM(as, i);
+            contains = PySequence_Contains((PyObject*)bs, m);
+            if (contains == -1)
+                goto onError;
+            if (contains == 0) {
+                    Py_INCREF(m);
+                    PyTuple_SET_ITEM(new_src, j, m);
+                    j += 1;
+            }
+        }
+        
+        for(i= 0; i < PyTuple_GET_SIZE(bs); i++) {
+            m = PyTuple_GET_ITEM(bs, i);
+            Py_INCREF(m);
+            PyTuple_SET_ITEM(new_src, j, m);
+            j += 1;
+        }
+         
+        if (_PyTuple_Resize(&new_src, j) != 0)
+            return -1;
             
         new_taint = PyDict_New();
         
@@ -387,8 +441,6 @@ PyTaint_PropagationResult(PyTaintObject **target,
         
     new_taint = PyDict_New();
     
-    PyDict_SetItemString(new_taint, "sources", src_sources);
-    
     n = PyTuple_GET_SIZE(src_merits);
     new_merits = PyTuple_New(n);
     if (new_merits == NULL)
@@ -406,13 +458,32 @@ PyTaint_PropagationResult(PyTaintObject **target,
                             "Invalid taint propagation strategy.");
         }
     }
-
+    
     // _PyTupleResize will set new_merits to NULL on failure, so instead of
     // goto onError just return
     if (_PyTuple_Resize(&new_merits, j) != 0)
       return -1;
 
     PyDict_SetItemString(new_taint, "merits", new_merits);
+    
+    n = PyTuple_GET_SIZE(src_sources);
+    j = 0;
+    
+    new_src = PyTuple_New(n);
+    if (new_src == NULL)
+        return -1;
+    
+    for (i = 0; i < PyTuple_GET_SIZE(src_sources); i++) {
+        m = PyTuple_GET_ITEM(src_sources, i);
+        Py_INCREF(m);
+        PyTuple_SET_ITEM(new_src, j, m);
+        j += 1;
+    }
+    
+     if (_PyTuple_Resize(&new_src, j) != 0)
+         return -1;
+    
+    PyDict_SetItemString(new_taint, "sources", new_src);
 
     done:
       Py_XDECREF(*target);
