@@ -8223,7 +8223,7 @@ unicode_sources(PyUnicodeObject *self)
 {
     PyTaintObject *t = PyUnicode_GET_MERITS(self);
     if(t == NULL) {
-        return PySet_New(NULL);
+        return PyTuple_New(0);
     }
     
     return PyTaint_GetSourcesList(t);

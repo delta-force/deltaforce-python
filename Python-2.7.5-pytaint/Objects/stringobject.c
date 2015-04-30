@@ -1720,7 +1720,7 @@ string_sources(PyStringObject *self)
 {
     PyTaintObject *t = self->ob_merits;
     if(t == NULL) {
-        return PySet_New(NULL);
+        return PyTuple_New(0);
     }
     
     return PyTaint_GetSourcesList(self->ob_merits);
